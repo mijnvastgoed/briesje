@@ -5,11 +5,11 @@
 - GitHub: `https://github.com/mijnvastgoed/briesje`
 - GitHub Pages: verwacht `https://mijnvastgoed.github.io/briesje/`
 - Supabase-organisatie: `Laurens VDV`
-- Supabase-project: apart project `Briesje` aanmaken; niet mengen met `MijnVastgoed`
+- Supabase-project: `Briesje` (`mjfsntdwhdhrhmxayymp`), gescheiden van `MijnVastgoed`
 
 ## Status
 
-De repository bestaat en de Supabase-organisatie is bereikbaar via de bestaande Safari-sessie. Publicatie en projectaanmaak volgen pas na lokale tests en de vereiste bevestiging voor blijvende externe wijzigingen.
+De repository is gevuld en het aparte Supabase-project is aangemaakt. Migraties, fail-closed seed en beide Edge Functions zijn gedeployed. De publieke catalogus retourneert veilig een lege lijst en private variantdata is niet via de publishable key leesbaar. GitHub Pages blijft bewust uit totdat de publieke-demo-gates zijn gesloten.
 
 ## Configuratie na projectaanmaak
 
