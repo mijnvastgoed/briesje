@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Briesje — draagbare ventilatoren. Dit is een demonstratie; verkoop is nog niet geopend.">
+  <meta name="theme-color" content="#f8f4e8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; connect-src 'self' https://*.supabase.co wss://*.supabase.co; img-src 'self' data: https:; style-src 'self'; font-src 'self'; frame-src https://checkout.stripe.com; base-uri 'self'; form-action 'self'; object-src 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Briesje · frisse lucht voor onderweg</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="config.js"></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Naar de inhoud</a>
+  <div class="demo-bar" role="status"><strong>Demowinkel</strong> · Bestellen en betalen is nog niet mogelijk.</div>
+
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="Briesje, naar de homepage">
+      <span class="brand-mark" aria-hidden="true">B</span><span>Briesje</span>
+    </a>
+    <nav aria-label="Hoofdnavigatie">
+      <a href="#producten">Ventilatoren</a>
+      <a href="#waarom">Waarom Briesje</a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-button" id="account-open" type="button" aria-label="Demo-account openen">
+        <span aria-hidden="true">♡</span><span class="action-label">Account</span>
+      </button>
+      <button class="cart-button" id="cart-open" type="button" aria-label="Winkelmand openen, 0 artikelen" aria-controls="cart-panel">
+        <span aria-hidden="true">Tas</span><span class="cart-count" id="cart-count">0</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="home">
+      <div class="hero-copy">
+        <p class="eyebrow">Klein formaat · groot briesje</p>
+        <h1>Koel blijven,<br><em>waar je ook gaat.</em></h1>
+        <p>Ontdek compacte ventilatoren voor je bureau, tas of volgende avontuur. Briesje selecteert straks alleen aantoonbaar veilige producten.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#producten">Bekijk de collectie</a>
+          <span class="microcopy">Gratis verzending is een demo-claim en nog niet bevestigd.</span>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <img src="assets/briesje-hero.png" alt="Draagbare ventilator in een zonnige Briesje-setting" width="1024" height="1024">
+        <span class="visual-note">Stil. Licht. Oplaadbaar.*</span>
+      </div>
+    </section>
+
+    <section class="trust-row" aria-label="Winkelbeloften in ontwikkeling">
+      <p><span aria-hidden="true">↻</span><strong>30 dagen retour*</strong><small>Nog niet operationeel</small></p>
+      <p><span aria-hidden="true">⌁</span><strong>Bewuste selectie</strong><small>Veiligheidscheck vereist</small></p>
+      <p><span aria-hidden="true">◇</span><strong>Veilig betalen*</strong><small>Testmodus, via Stripe gepland</small></p>
+    </section>
+
+    <section class="catalog-section" id="producten">
+      <div class="section-heading">
+        <div><p class="eyebrow">Collectie in voorbereiding</p><h2>Vind jouw Briesje</h2></div>
+        <p>Alle namen, prijzen en eigenschappen zijn demonstratiedata. Bronproducten blijven geblokkeerd totdat alle controles zijn afgerond.</p>
+      </div>
+      <div class="filters" aria-label="Productfilters">
+        <button class="filter active" data-filter="all" type="button">Alles</button>
+        <button class="filter" data-filter="hand" type="button">Hand & tas</button>
+        <button class="filter" data-filter="desk" type="button">Bureau</button>
+        <button class="filter" data-filter="outdoor" type="button">Buiten</button>
+        <button class="filter" data-filter="source" type="button">Bronproducten</button>
+      </div>
+      <div class="product-grid" id="product-grid" aria-live="polite"></div>
+    </section>
+
+    <section class="story" id="waarom">
+      <div class="story-card">
+        <p class="eyebrow">Ons uitgangspunt</p>
+        <h2>Geen hete lucht.</h2>
+        <p>Briesje publiceert pas een product als prijs, levering, retourroute en productveiligheid aantoonbaar kloppen. Tot die tijd blijft deze winkel een transparant prototype.</p>
+      </div>
+      <div class="story-list">
+        <article><span>01</span><div><h3>Helder geselecteerd</h3><p>Geen nep-reviews, schaarste of onbewezen koelclaims.</p></div></article>
+        <article><span>02</span><div><h3>Prijs met vangnet</h3><p>Een wijziging wordt straks op de server gecontroleerd; verdachte prijzen blokkeren verkoop.</p></div></article>
+        <article><span>03</span><div><h3>Service van hier</h3><p>Briesje wordt zelf verantwoordelijk voor retour, garantie en ondersteuning.</p></div></article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <a class="brand footer-brand" href="#home"><span class="brand-mark">B</span><span>Briesje</span></a>
+    <p>Een frisse webwinkel in ontwikkeling.</p>
+    <nav aria-label="Voettekst"><button data-info="contact">Contact</button><button data-info="privacy">Privacy</button><button data-info="voorwaarden">Voorwaarden</button></nav>
+    <small>© <span id="year"></span> Briesje · Demonstratie, geen aanbod of verkoop.</small>
+  </footer>
+
+  <dialog id="product-dialog" class="product-dialog" aria-labelledby="product-title"><div id="product-detail"></div></dialog>
+  <dialog id="account-dialog" class="account-dialog" aria-labelledby="account-title">
+    <button class="dialog-close" data-close type="button" aria-label="Sluiten">×</button>
+    <p class="eyebrow">Demo-account</p><h2 id="account-title">Welkom bij Briesje</h2>
+    <div id="account-content"></div>
+  </dialog>
+  <dialog id="info-dialog" class="info-dialog" aria-labelledby="info-title">
+    <button class="dialog-close" data-close type="button" aria-label="Sluiten">×</button><h2 id="info-title"></h2><div id="info-content"></div>
+  </dialog>
+
+  <div class="scrim" id="scrim" hidden></div>
+  <aside class="cart-panel" id="cart-panel" aria-labelledby="cart-title" aria-hidden="true">
+    <div class="cart-heading"><div><p class="eyebrow">Demo</p><h2 id="cart-title">Jouw winkelmand</h2></div><button id="cart-close" class="dialog-close" type="button" aria-label="Winkelmand sluiten">×</button></div>
+    <div id="cart-items" class="cart-items"></div>
+    <div class="cart-footer">
+      <div class="cart-total"><span>Demo-totaal</span><strong id="cart-total">€ 0,00</strong></div>
+      <p>Bedragen zijn fictief. De serverkoppeling en betaalomgeving zijn nog niet actief.</p>
+      <button class="button button-primary checkout-button" id="checkout" type="button">Bekijk demo-checkout</button>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
