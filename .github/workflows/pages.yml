@@ -1,8 +1,7 @@
 name: Deploy Briesje demo to Pages
 
 on:
-  push:
-    branches: [main]
+  # Bewust handmatig: Pages blijft uit totdat de publieke-demo-gates groen zijn.
   workflow_dispatch:
 
 permissions:
