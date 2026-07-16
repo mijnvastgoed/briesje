@@ -17,10 +17,28 @@ port = 54323
 [auth]
 enabled = true
 site_url = "https://mijnvastgoed.github.io/briesje/"
-additional_redirect_urls = ["http://127.0.0.1:5187/**", "http://localhost:5187/**"]
+additional_redirect_urls = ["https://mijnvastgoed.github.io/briesje/**", "http://127.0.0.1:5187/**", "http://localhost:5187/**"]
+
+[auth.email]
+enable_confirmations = true
+max_frequency = "1m"
+otp_length = 8
+
+[auth.mfa.totp]
+enroll_enabled = true
+verify_enabled = true
+
+[storage.vector]
+enabled = false
 
 [functions.create-checkout-session]
 verify_jwt = true
 
 [functions.stripe-webhook]
+verify_jwt = false
+
+[functions.sync-supplier-products]
+verify_jwt = false
+
+[functions.process-fulfillment]
 verify_jwt = false

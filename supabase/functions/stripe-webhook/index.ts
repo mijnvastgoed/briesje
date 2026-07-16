@@ -8,21 +8,25 @@ Deno.serve(async (req) => {
   const signature = req.headers.get("stripe-signature");
   if (!signature || Number(req.headers.get("content-length") ?? 0) > 1_000_000) return json({ error: "invalid_webhook" }, 400);
   try {
-    const key = required("STRIPE_SECRET_KEY");
-    if (!key.startsWith("sk_test_") || Deno.env.get("EXPECTED_STRIPE_LIVEMODE") !== "false") return json({ error: "test_mode_required" }, 503);
+    const key = required("STRIPE_SECRET_KEY"), expectedLive = Deno.env.get("EXPECTED_STRIPE_LIVEMODE");
+    const modeValid = expectedLive === "false" ? key.startsWith("sk_test_") : expectedLive === "true" && Deno.env.get("LIVE_PAYMENTS_ENABLED") === "true" && key.startsWith("sk_live_");
+    if (!modeValid) return json({ error: "payment_mode_not_enabled" }, 503);
     const raw = await req.text();
     if (raw.length > 1_000_000) return json({ error: "invalid_webhook" }, 400);
     const stripe = new Stripe(key, { apiVersion: "2024-06-20" });
     const event = await stripe.webhooks.constructEventAsync(raw, signature, required("STRIPE_WEBHOOK_SECRET"));
-    if (event.livemode || !accepted.has(event.type)) return json({ received: true, outcome: "ignored" });
+    if (event.livemode !== (expectedLive === "true") || !accepted.has(event.type)) return json({ received: true, outcome: "ignored" });
     const session = event.data.object as Stripe.Checkout.Session;
     const orderId = session.metadata?.order_id ?? session.client_reference_id;
     if (!orderId) return json({ received: true, outcome: "quarantined" });
     try {
       const admin = createClient(required("SUPABASE_URL"), required("SUPABASE_SERVICE_ROLE_KEY"));
+      const address = session.shipping_details?.address ?? session.customer_details?.address;
+      const shipping = address ? { name: session.shipping_details?.name ?? session.customer_details?.name, line1: address.line1, line2: address.line2,
+        postalCode: address.postal_code, city: address.city, country: address.country, phone: session.customer_details?.phone } : null;
       const { data, error } = await admin.rpc("process_checkout_event", { p_event_id:event.id,p_event_type:event.type,p_object_id:session.id,p_livemode:event.livemode,
         p_created_at:new Date(event.created*1000).toISOString(),p_order_id:orderId,p_currency:session.currency ?? "",p_amount_total:session.amount_total ?? -1,
-        p_payment_status:session.payment_status,p_payment_intent_id:typeof session.payment_intent === "string" ? session.payment_intent : null });
+        p_payment_status:session.payment_status,p_payment_intent_id:typeof session.payment_intent === "string" ? session.payment_intent : null,p_shipping:shipping });
       if (error) throw error;
       return json({ received: true, outcome: data });
     } catch {

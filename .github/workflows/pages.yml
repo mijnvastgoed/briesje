@@ -1,4 +1,4 @@
-name: Deploy Briesje demo to Pages
+name: Deploy Briesje to Pages
 
 on:
   # Bewust handmatig: Pages blijft uit totdat de publieke-demo-gates groen zijn.
@@ -21,14 +21,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify demo safety and assets
+      - name: Verify launch safety and assets
         run: |
           test -f web/index.html
           test -f web/app.js
           test -f web/styles.css
           test -f web/assets/briesje-hero.png
-          grep -q 'Demowinkel' web/index.html
+          grep -q 'Lancering in voorbereiding' web/index.html
           grep -q 'shippingCountry:"NL"' web/app.js
+          if grep -RE '1005008081738393|1005007529621225|12000043648049237|12000041184498228' web; then exit 1; fi
           if grep -RE 'sk_(live|test)_[A-Za-z0-9]|service_role' web; then exit 1; fi
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

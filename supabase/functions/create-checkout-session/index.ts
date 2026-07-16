@@ -11,8 +11,9 @@ Deno.serve(async (req) => {
   if (!corsHeaders) return json({ error: "origin_not_allowed" }, 403);
   try {
     if (Deno.env.get("CHECKOUT_ENABLED") !== "true") return json({ error: "checkout_disabled" }, 503, corsHeaders);
-    const stripeKey = required("STRIPE_SECRET_KEY");
-    if (!stripeKey.startsWith("sk_test_")) return json({ error: "test_mode_required" }, 503, corsHeaders);
+    const stripeKey = required("STRIPE_SECRET_KEY"), stripeMode = Deno.env.get("STRIPE_MODE") ?? "test";
+    const safeMode = stripeMode === "test" ? stripeKey.startsWith("sk_test_") : stripeMode === "live" && Deno.env.get("LIVE_PAYMENTS_ENABLED") === "true" && stripeKey.startsWith("sk_live_");
+    if (!safeMode) return json({ error: "payment_mode_not_enabled" }, 503, corsHeaders);
     const auth = req.headers.get("authorization") ?? "";
     if (!auth.startsWith("Bearer ")) return json({ error: "authentication_required" }, 401, corsHeaders);
     const url = required("SUPABASE_URL"), anon = required("SUPABASE_ANON_KEY"), service = required("SUPABASE_SERVICE_ROLE_KEY");
